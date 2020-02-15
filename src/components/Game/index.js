@@ -1,97 +1,74 @@
 import React from "react";
 import Row from "../Row";
+import Col from "../Col";
+import Gameboard from "../Gameboard";
+import images from "../../data/images.json";
 
 class Game extends React.Component {
     state = {
         round: 1,
         score: 0,
-        highScore: 0
+        highScore: 0,
+        images: images.imagePaths,
+        clicked: []
+    };
+
+    componentDidMount() {
+        this.shuffleImages();
+    }
+
+    startNextRound = () => {
+        this.setState({
+            round: this.state.round + 1,
+            score: 0,
+            highScore: this.state.score > this.state.highScore ? this.state.score : this.state.highScore,
+            clicked: []
+        });
+    };
+
+    shuffleImages = () => {
+        //shuffle 'em
+        let images = this.state.images;
+        let shuffledImages = [];
+        while (images.length > 0) {
+            let image = images[Math.floor(Math.random() * images.length)];
+            shuffledImages.push(image);
+            images = images.filter(img => img !== image);
+        }
+
+        this.setState({
+            images: shuffledImages
+        });
+    };
+
+    handleGamepieceClick = event => {
+        let clicked = event.target.src;
+        if (this.state.clicked.includes(clicked)) {
+            this.startNextRound();
+        } else {
+            this.setState({
+                score: this.state.score + 1,
+                clicked: this.state.clicked.concat(clicked)
+            });
+            this.shuffleImages();
+        }
     };
 
     render() {
         return (
             <Row>
-                <div className="col-md-9" id="game">
-                    <Row>
-                        <div className="col-sm-3">
-                            <img src="/assets/img/pic1.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            <img src="/assets/img/pic2.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic3.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic4.png" className="img-fluid img-thumbnail" />
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic5.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic6.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic7.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic8.png" className="img-fluid img-thumbnail" />
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic9.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic10.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic11.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic12.png" className="img-fluid img-thumbnail" />
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic13.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic14.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic15.png" className="img-fluid img-thumbnail" />
-                        </div>
-                        <div className="col-sm-3">
-                            {" "}
-                            <img src="/assets/img/pic16.png" className="img-fluid img-thumbnail" />
-                        </div>
-                    </Row>
-                </div>
+                <Col size="md-9">
+                    <Gameboard images={this.state.images} handleGamepieceClick={this.handleGamepieceClick} />
+                </Col>
                 <div className="col-md-3" id="scoreboard">
                     <h3>Scoreboard</h3>
                     <dl className="row">
                         <dt className="col-sm-6 text-right">Round: </dt>
-                        <dd className="col-sm-6 text-left">0</dd>
+                        <dd className="col-sm-6 text-left">{this.state.round}</dd>
                         <dt className="col-sm-6 text-right">Score: </dt>
-                        <dd className="col-sm-6 text-left">0</dd>
+                        <dd className="col-sm-6 text-left">{this.state.score}</dd>
                         <dt className="col-sm-6 text-right">High Score: </dt>
-                        <dd className="col-sm-6 text-left">0</dd>
+                        <dd className="col-sm-6 text-left">{this.state.highScore}</dd>
                     </dl>
                 </div>
             </Row>
