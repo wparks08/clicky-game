@@ -3,6 +3,8 @@ import Row from "../Row";
 import Col from "../Col";
 import Gameboard from "../Gameboard";
 import images from "../../data/images.json";
+import Scoreboard from "../Scoreboard";
+import Alert from "../Alert";
 
 class Game extends React.Component {
     state = {
@@ -10,7 +12,11 @@ class Game extends React.Component {
         score: 0,
         highScore: 0,
         images: images.imagePaths,
-        clicked: []
+        clicked: [],
+        message: {
+            text: "Click an image to begin!",
+            variant: "info"
+        }
     };
 
     componentDidMount() {
@@ -22,7 +28,11 @@ class Game extends React.Component {
             round: this.state.round + 1,
             score: 0,
             highScore: this.state.score > this.state.highScore ? this.state.score : this.state.highScore,
-            clicked: []
+            clicked: [],
+            message: {
+                text: "Already clicked that one! Starting next round.",
+                variant: "danger"
+            }
         });
     };
 
@@ -48,7 +58,11 @@ class Game extends React.Component {
         } else {
             this.setState({
                 score: this.state.score + 1,
-                clicked: this.state.clicked.concat(clicked)
+                clicked: this.state.clicked.concat(clicked),
+                message: {
+                    text: "Good job!",
+                    variant: "success"
+                }
             });
             this.shuffleImages();
         }
@@ -60,17 +74,14 @@ class Game extends React.Component {
                 <Col size="md-9">
                     <Gameboard images={this.state.images} handleGamepieceClick={this.handleGamepieceClick} />
                 </Col>
-                <div className="col-md-3" id="scoreboard">
-                    <h3>Scoreboard</h3>
-                    <dl className="row">
-                        <dt className="col-sm-6 text-right">Round: </dt>
-                        <dd className="col-sm-6 text-left">{this.state.round}</dd>
-                        <dt className="col-sm-6 text-right">Score: </dt>
-                        <dd className="col-sm-6 text-left">{this.state.score}</dd>
-                        <dt className="col-sm-6 text-right">High Score: </dt>
-                        <dd className="col-sm-6 text-left">{this.state.highScore}</dd>
-                    </dl>
-                </div>
+                <Col size="md-3">
+                    <Scoreboard
+                        score={this.state.score}
+                        round={this.state.round}
+                        highScore={this.state.highScore}
+                        message={this.state.message}
+                    />
+                </Col>
             </Row>
         );
     }
