@@ -4,7 +4,6 @@ import Col from "../Col";
 import Gameboard from "../Gameboard";
 import images from "../../data/images.json";
 import Scoreboard from "../Scoreboard";
-import Alert from "../Alert";
 
 class Game extends React.Component {
     state = {
