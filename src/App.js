@@ -6,6 +6,8 @@ import Container from "./components/Container";
 import Game from "./components/Game";
 
 function App() {
+    document.title = "Clicky-Game";
+
     return (
         <div className="App">
             <Navbar />

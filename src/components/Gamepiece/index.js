@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function Gamepiece(props) {
-    return <img src={props.image} className="img-fluid img-thumbnail" onClick={props.handleGamepieceClick} />;
+    return (
+        <img
+            src={props.image}
+            className="img-fluid img-thumbnail"
+            onClick={props.handleGamepieceClick}
+            alt="Gamepiece"
+        />
+    );
 }
 
 Gamepiece.propTypes = {
