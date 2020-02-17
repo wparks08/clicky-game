@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import path from "path";
 
 function Gamepiece(props) {
     return (
